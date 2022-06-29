@@ -67,13 +67,3 @@ final class ResponseCacheControl
         return null;
     }
 }
-
-$cacheHeaders = new ResponseCacheControl(
-    static fn() => $_SERVER['HTTP_IF_NONE_MATCH'] ?? '',
-    static fn() => new DateTimeImmutable($_SERVER['HTTP_IF_MODIFIED_SINCE'] ?? 'this minute')
-);
-$headers = $cacheHeaders->addTerm(CacheResponseTerms::Immutable)->recommendStatus($etag, $expiresAt);
-if (($status = $cacheHeaders->recommendStatus($etag, $expiresAt)) !== null) {
-    http_response_code($status->value);
-    die();
-}
