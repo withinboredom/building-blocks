@@ -35,3 +35,19 @@ new class extends ErrorControl {
 };
 ```
 
+## Cache-Control
+
+The cache is a very important bit of information for a browser, which can save you a huge amount of bandwidth.
+
+```php
+$cacheHeaders = new ResponseCacheControl(
+    static fn() => $_SERVER['HTTP_IF_NONE_MATCH'] ?? '',
+    static fn() => new DateTimeImmutable($_SERVER['HTTP_IF_MODIFIED_SINCE'] ?? 'this minute')
+);
+if(($status = $cacheHeaders->recommendStatus($etag, $expiresAt)) !== null) {
+    http_response_code($status->value);
+    die();
+}
+$headers = $cacheHeaders->addTerm(CacheResponseTerms::Immutable)->recommendStatus($etag, $expiresAt);
+// pass headers to PSR response object
+```
