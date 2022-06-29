@@ -1,0 +1,64 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "4da4c7cb31bc307e0467e1e7df53489b",
+    "packages": [
+        {
+            "name": "withinboredom/response-code",
+            "version": "v1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/withinboredom/response-code.git",
+                "reference": "e8d4e21ea7737952c753e1662b621337017f22ac"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/withinboredom/response-code/zipball/e8d4e21ea7737952c753e1662b621337017f22ac",
+                "reference": "e8d4e21ea7737952c753e1662b621337017f22ac",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/functions.php"
+                ],
+                "psr-4": {
+                    "Withinboredom\\ResponseCode\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Robert Landers",
+                    "email": "landers.robert@gmail.com"
+                }
+            ],
+            "description": "A simple response code enum library",
+            "support": {
+                "issues": "https://github.com/withinboredom/response-code/issues",
+                "source": "https://github.com/withinboredom/response-code/tree/v1.0"
+            },
+            "time": "2022-06-29T07:16:40+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "php": ">=8.1"
+    },
+    "platform-dev": [],
+    "plugin-api-version": "2.2.0"
+}

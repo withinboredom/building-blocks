@@ -1,0 +1,20 @@
+{
+    "name": "withinboredom/building-blocks",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Withinboredom\\BuildingBlocks\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Robert Landers",
+            "email": "landers.robert@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.1",
+        "withinboredom/response-code": "^1.0"
+    }
+}
