@@ -35,7 +35,7 @@ class Router
 
         // calculate expected parameters and their current values
         $params = array_filter(
-            array_map(static fn(string $k, string|null $v) => $k === $v || empty($k) ? null : $v,
+            array_map(static fn(string $k, string|null $v) => empty($k) || !(str_starts_with($k, ':')) ? null : $v,
                 array_keys($combined),
                 $combined)
         );
@@ -47,7 +47,7 @@ class Router
         $callback = static function () use ($callback, $combined) {
             $params = array_filter(
                 $combined,
-                static fn(string $k, string|null $v) => $k !== $v && !empty($k),
+                static fn(string|null $v, string $k) => !empty($k) && str_starts_with($k, ':'),
                 ARRAY_FILTER_USE_BOTH
             );
             return $callback(...array_combine(array_map(static fn($x) => trim($x, ':'), array_keys($params)), $params));
@@ -59,13 +59,6 @@ class Router
 
     public function doRouting(): Result|null
     {
-        // calculate the maximum number of segments in a path
-        $maxMatch = array_reduce(
-            array_column($this->routes, 0),
-            static fn($carry, $item) => max($carry, count($item)),
-            0
-        );
-
         // sort parameters
         usort($this->routes, static fn($a, $b) => ($a[0] ?? null) <=> ($b[0] ?? null));
 

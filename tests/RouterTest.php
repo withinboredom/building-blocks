@@ -48,4 +48,18 @@ class RouterTest extends TestCase
         $this->assertEquals(new Result(HttpResponseCode::NoContent), $router->doRouting());
         $this->assertTrue($called);
     }
+
+    public function testMultiple()
+    {
+        $router = new Router('GET', '/login/test/123');
+        $router->registerRoute('GET', '/login/has-credentials', function () {
+            $this->assertTrue(false);
+            return new Result(HttpResponseCode::NoContent);
+        });
+        $router->registerRoute('GET', '/login/test/:id', function (string $id) {
+            $this->assertTrue(true);
+            return new Result(HttpResponseCode::NoContent);
+        });
+        $this->assertEquals(HttpResponseCode::NoContent, $router->doRouting()->code);
+    }
 }
