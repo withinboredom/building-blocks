@@ -39,9 +39,9 @@ class RouterTest extends TestCase
     {
         $router = new Router('GET', '/test/user/123');
         $called = false;
-        $router->registerRoute('GET', '/test/user/:id', function ($params) use (&$called) {
+        $router->registerRoute('GET', '/test/user/:id', function (string $id) use (&$called) {
             $called = true;
-            $this->assertSame([':id' => '123'], $params);
+            $this->assertSame('123', $id);
             return new Result(HttpResponseCode::NoContent);
         });
         $router->registerRoute('GET', '/test/user', static fn() => throw new LogicException());

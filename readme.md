@@ -62,7 +62,7 @@ A really simple router working in O(routes + parameters) time.
 ```php
 $router = new Router($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
 $router->addRoute('/', static fn() => new Result(\Withinboredom\ResponseCode\HttpResponseCode::Ok, 'Hello, world!'));
-$router->addRoute('/hello/:name', static fn($params) => new Result(\Withinboredom\ResponseCode\HttpResponseCode::Ok, "Hello, $params[':name']!"));
+$router->addRoute('/hello/:name', static fn(string $name) => new Result(\Withinboredom\ResponseCode\HttpResponseCode::Ok, "Hello, $name!"));
 
 // emit the result of the routing and die
 $router->doRouting()->emit();

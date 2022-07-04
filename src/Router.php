@@ -50,7 +50,7 @@ class Router
                 static fn(string $k, string|null $v) => $k !== $v && !empty($k),
                 ARRAY_FILTER_USE_BOTH
             );
-            return $callback($params);
+            return $callback(...array_combine(array_map(static fn($x) => trim($x, ':'), array_keys($params)), $params));
         };
 
         // save the route
