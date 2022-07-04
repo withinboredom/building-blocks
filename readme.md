@@ -1,5 +1,8 @@
 # Random building blocks
 
+This is a library that totally ignores PSRs with a focus on simplicity. It is not a library for building complex
+applications, but rather when you just need to get stuff done with minimal fuss.
+
 ## Turning errors into exceptions
 
 The `ErrorControl` class allows for simply turning errors into exceptions:
@@ -50,4 +53,17 @@ if(($status = $cacheHeaders->recommendStatus($etag, $expiresAt)) !== null) {
 }
 $headers = $cacheHeaders->addTerm(CacheResponseTerms::Immutable)->recommendStatus($etag, $expiresAt);
 // pass headers to PSR response object
+```
+
+## A ridiculously simple router
+
+A really simple router working in O(routes + parameters) time.
+
+```php
+$router = new Router($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
+$router->addRoute('/', static fn() => new Result(\Withinboredom\ResponseCode\HttpResponseCode::Ok, 'Hello, world!'));
+$router->addRoute('/hello/:name', static fn($params) => new Result(\Withinboredom\ResponseCode\HttpResponseCode::Ok, "Hello, $params[':name']!"));
+
+// emit the result of the routing and die
+$router->doRouting()->emit();
 ```
