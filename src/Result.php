@@ -22,11 +22,15 @@ class Result
 
     public function emit(): never
     {
+        $this->justEmit();
+        die();
+    }
+    
+    public function justEmit(): void {
         http_response_code($this->code->value);
         if ($this->body !== null) {
             echo $this->body instanceof Throwable ? json_encode(['errors' => [$this->body->getMessage()]],
                 self::$EXCEPTION_SERIALIZATION_FLAGS) : $this->body;
         }
-        die();
     }
 }
