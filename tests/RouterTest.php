@@ -51,6 +51,18 @@ class RouterTest extends TestCase
         $this->assertTrue($called);
     }
 
+    public function testRoot()
+    {
+        $router = new Router('GET', '/');
+        $called = false;
+        $router->registerRoute('GET', '/', function () use (&$called) {
+            $called = true;
+            return new Result(HttpResponseCode::NoContent);
+        });
+        $this->assertEquals(new Result(HttpResponseCode::NoContent), $router->doRouting());
+        $this->assertTrue($called);
+    }
+
     public function testMultiple()
     {
         $router = new Router('GET', '/login/test/123');

@@ -16,7 +16,9 @@ class Router
         public readonly string $uri,
         protected array $routes = []
     ) {
-        $this->uriParts = array_values(array_map($this->normalizePathPart(...), array_filter(explode('/', $uri))));
+        $this->uriParts = array_values(
+            array_map($this->normalizePathPart(...), preg_split('@/@', $uri, -1, PREG_SPLIT_NO_EMPTY))
+        );
     }
 
     public function registerRoute(string $method, string $path, callable $callback): void
@@ -27,7 +29,7 @@ class Router
         }
 
         // break the path into parts of the path
-        $route = explode('/', $path);
+        $route = preg_split('@/@', $path, -1, PREG_SPLIT_NO_EMPTY);
 
         // nothing to do if the number of parts don't match
         if (count($this->uriParts) !== count($route)) {
