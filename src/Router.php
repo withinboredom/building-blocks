@@ -21,36 +21,40 @@ class Router
 
     public function registerRoute(string $method, string $path, callable $callback): void
     {
+        // nothing to do if the method doesn't match
+        if ($method !== $this->method) {
+            return;
+        }
+
         // break the path into parts of the path
-        $route = array_values(array_filter(explode('/', $path)));
+        $route = explode('/', $path);
 
-        // normalize both arrays
-        $max = max(count($this->uriParts), count($route));
-
-        // combine the array into a single array with the parameters as keys
-        $combined = array_combine(
-            array_pad($route, $max, null),
-            array_pad($this->uriParts, $max, null)
-        );
-
-        // calculate expected parameters and their current values
-        $params = array_filter(
-            array_map(static fn(string $k, string|null $v) => empty($k) || !(str_starts_with($k, ':')) ? null : $v,
-                array_keys($combined),
-                $combined)
-        );
+        // nothing to do if the number of parts don't match
+        if (count($this->uriParts) !== count($route)) {
+            return;
+        }
 
         // now replace the parameters in the expected route with the actual values
-        $matchRoute = array_replace($route, $params);
+        $matchRoute = array_map(
+            static fn(string $v, string $k) => str_starts_with($v, ':') ? $k : $v,
+            $route,
+            $this->uriParts
+        );
 
         // create a callback, deferring as much work as possible in exchange for some memory
-        $callback = static function () use ($callback, $combined) {
+        $callback = function () use ($route, $callback) {
             $params = array_filter(
-                $combined,
+                array_combine(
+                    $route,
+                    $this->uriParts,
+                ),
                 static fn(string|null $v, string $k) => !empty($k) && str_starts_with($k, ':'),
                 ARRAY_FILTER_USE_BOTH
             );
-            return $callback(...array_combine(array_map(static fn($x) => trim($x, ':'), array_keys($params)), $params));
+            return $callback(
+                ...
+                array_combine(array_map(static fn($x) => trim($x, ':'), array_keys($params)), $params)
+            );
         };
 
         // save the route
@@ -60,7 +64,7 @@ class Router
     public function doRouting(): Result|null
     {
         // sort parameters
-        usort($this->routes, static fn($a, $b) => ($a[0] ?? null) <=> ($b[0] ?? null));
+        //usort($this->routes, static fn($a, $b) => ($a[0] ?? null) <=> ($b[0] ?? null));
 
         $match = [$this->method, ...$this->uriParts];
 

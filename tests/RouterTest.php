@@ -39,12 +39,14 @@ class RouterTest extends TestCase
     {
         $router = new Router('GET', '/test/user/123');
         $called = false;
+        $router->registerRoute('GET', '/test/ex/:id', static fn($id) => throw new LogicException());
         $router->registerRoute('GET', '/test/user/:id', function (string $id) use (&$called) {
             $called = true;
             $this->assertSame('123', $id);
             return new Result(HttpResponseCode::NoContent);
         });
         $router->registerRoute('GET', '/test/user', static fn() => throw new LogicException());
+        $router->registerRoute('GET', '/test/site/:id', static fn($id) => throw new LogicException());
         $this->assertEquals(new Result(HttpResponseCode::NoContent), $router->doRouting());
         $this->assertTrue($called);
     }
